@@ -5,13 +5,14 @@ from FirstDome.items import FirstdomeItem
 class FirstbloodSpider(scrapy.Spider):
     name = 'FirstBlood'
     #allowed_domains = ['www.baidu.com']
+    #起始url
     start_urls = ['http://datachart.500.com/ssq/history/newinc/history.php?limit=100&sort=0']
     #url = 'http://datachart.500.com/ssq/history/history.shtml'
 
-
     def parse(self, response):
-        i = 0
+        #xpath获取tr信息
         div_list = response.xpath('//div[@class="chart"]/table/tbody[1]/tr')
+        #循环获取红号和蓝号数字
         for div in div_list:
             qihao = div.xpath('./td[1]/text()').extract_first()
             red1 = div.xpath('./td[2]/text()').extract_first()
@@ -21,8 +22,7 @@ class FirstbloodSpider(scrapy.Spider):
             red5 = div.xpath('./td[6]/text()').extract_first()
             red6 = div.xpath('./td[7]/text()').extract_first()
             blue = div.xpath('./td[8]/text()').extract_first()
-            i+=1
-            print("%s %s" %(i,qihao))
+            #定义item对象
             item = FirstdomeItem()
             item['qihao'] = qihao
             item['red1'] = red1

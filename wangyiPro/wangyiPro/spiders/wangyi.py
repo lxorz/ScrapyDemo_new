@@ -10,9 +10,9 @@ class WangyiSpider(scrapy.Spider):
 
     def __init__(self):
         #实例化一个浏览器对象
-        self.bro = webdriver.Chrome(executable_path="C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe")
+        self.bro = webdriver.Chrome(executable_path="C:\\Users\Administrator\Desktop\chromedriver.exe")
 
-    def close(self,spider):
+    def closed(self,spider):
         print("end spider")
         self.bro.quit()
 
@@ -23,6 +23,7 @@ class WangyiSpider(scrapy.Spider):
         li_list = []
         for index in indexs:
             li_list.append(lis[index])
+        #获取四个板块的链接和文字标题
         for li in li_list:
             url = li.xpath('./a/@href').extract_first()
             title = li.xpath('./a/text()').extract_first()
@@ -48,7 +49,7 @@ class WangyiSpider(scrapy.Spider):
             item['url'] = url
             item['imgUrl'] = imgUrl
             item['tag'] = tag
-            item['title'] =title
+            item['title'] = title
 
             #对url发情请求，获取对应页面中存储的新闻内容数据
             yield scrapy.Request(url=url,callback=self.getContent,meta={'item':item})
